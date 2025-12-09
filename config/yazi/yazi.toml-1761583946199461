@@ -1,0 +1,41 @@
+# ~/.config/yazi/yazi.toml
+
+# --- Manager Settings ---------------------------------
+[manager]
+# Show hidden files by default
+show_hidden = true
+# Set layout: [Parent, Current, Preview]
+# My preference: 15% 35% 50%
+ratio = [1, 2, 3]
+# Set the default sort order
+sort_by = "modified" # Other options: "alphabetical", "natural", "created", "size"
+sort_reverse = true  # Sort descending (newest first)
+
+# --- Opener Settings ----------------------------------
+# Define "openers" (applications)
+[opener]
+edit = [
+    { run = 'nvim "$@"', block = true }, # Use nvim, wait for it to close
+]
+
+play = [
+    { run = 'mpv "$@"', orphan = true },  # Use mpv, run in background
+]
+
+# --- Open Rules ---------------------------------------
+# Assign openers to file types (MIME types or names)
+[open]
+rules = [
+    # Text files
+    { mime = "text/*", use = "edit" },
+    { mime = "application/json", use = "edit" },
+
+    # Videos & Audio
+    { mime = "video/*", use = "play" },
+    { mime = "audio/*", use = "play" },
+    
+    # Fallback: Use system's default 'xdg-open'
+    { name = "*", use = [
+        { run = 'xdg-open "$@"', orphan = true }
+    ]}
+]

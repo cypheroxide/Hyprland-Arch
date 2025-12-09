@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Rofi category menu launcher
+# Ensures caches are fresh and launches rofi with custom category mode
+
+# Regenerate cache if needed (non-blocking)
+~/.local/bin/appmenu-index generate --quiet || true
+
+# Launch rofi with custom category mode and golden theme
+exec rofi -show cats -modi "cats:~/.config/rofi/category-menu/rofi-catmode" -theme ~/.config/rofi/golden.rasi

@@ -1,0 +1,159 @@
+* {
+    font-family: DejaVu Sans Mono; 
+    /*font-size: 20px;            [>v1.4.1,font is written here and the window is randomly offset<]*/
+    border: none;
+}
+
+/*Global Window*/
+window {
+    margin: 0px;
+    font-size: 20px;            /*v1.4.1,font-size is written here to ensure the window is centered every time*/
+    border-radius: 18px;
+    border: 2px solid rgba(255,136,0,0.8);
+    background-color: rgba(0,0,0,0.8);
+}
+
+/*Search box*/
+#input {
+    margin: 8px;
+    border-radius: 24px;
+    border: 2px solid rgba(255,96,255,1); 
+    background-color: rgba(0,0,0,0.1);
+    /*background-color: rgba(255,96,255,0.5); */
+    font-size: 28px;
+    font-weight: normal;
+    color: rgb(255,255,96);
+}
+
+/*Search box icon color*/
+#input image {
+    border: none;
+    color: rgba(255,136,0,1);
+}
+
+/*Special effects when focusing on the search box*/
+#input:focus {
+      box-shadow: 
+      rgba(255,96,255,0.4) 0px 0px 10px 2px, 
+      rgba(255,96,255, 0.65) 0px 8px 6px -1px, 
+      rgba(255,96,255, 0.8) 0px 1px 0px inset;
+  }
+
+
+/*list*/
+#inner-box {
+    margin: 5px;
+    border: 2px solid rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+}
+
+/*background*/
+#outer-box {
+    margin: 0px;
+    border: 3px solid rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+}
+
+/*list border*/
+#scroll {
+    margin: 1px;
+    border: 2px solid rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+}
+
+/*fonts in the list*/
+#text {
+    color: rgba(255,255,96,1);
+    margin: 5px;
+}
+
+/*icon*/
+#entry image {
+    padding-right: 3px;
+    /*border: 2px solid cyan;*/
+    background-color: transparent;
+}
+
+/*The second color in the list is superimposed on the backgroun color in the window*/
+*#entry:nth-child(even){
+    /*border: 1px solid rgba(15,21,70,0.8);*/
+    background-color: rgba(0,0,0,0.1);
+}
+
+/*Selected theme*/
+#entry:selected {
+    margin: 0px;
+    border-radius: 24px;
+    border: 2px solid rgba(128,255,128,0.8);
+    background-color: transparent;
+}
+
+/*Font settings for the selected item*/
+#text:selected {
+    margin: 5px;
+    color: rgba(128,255,128,1);
+    font-size: 22px;
+    font-weight: bold;
+    /*border: 3px solid yellow;*/
+    /*background-color: blue;*/
+}
+/*Selected item's font*/
+/*#entry:selected #text {*/
+    /*font-size: 22px;*/
+    /*font-weight: bold;*/
+    /*color: rgba(0,170,170,0.8);*/
+/*}*/
+
+
+    /*Subitems of the entry*/
+    #entry.activatable {
+        /*border: 2px solid yellow;*/
+        margin: 2px;
+        border-radius: 24px;
+        background-color: rgba(0,0,0,0.1);
+        /*border-bottom-width: 1px; */
+        /*border-bottom-color: cyan; */
+        /*border-bottom-style: solid; */
+        /*border-top-width: 1px; */
+        /*border-top-color: cyan; */
+        /*border-top-style: solid; */
+    }
+
+    /*Sub-item font color*/
+    #entry.activatable #text {
+        color: rgba(128,255,128,1);
+        font-size: 20px;
+        font-weight: normal;
+        font-style: italic;
+    }
+
+    /*Selected item of sub-item*/
+    #entry.activatable:selected {
+        border: 3px dashed rgba(128,255,128,1);
+        background-color: rgba(0,0,0,0.3);
+    }
+
+    /*Font color of the selected sub-item*/
+    #entry.activatable:selected #text {
+        font-size: 22px;
+        font-style: normal;
+        font-weight: bold;
+        color: rgb(255,255,96);
+    }
+
+    /*Subproject>Expand symbol*/
+    #entry arrow {
+        font-weight: bold;
+        color: rgba(255,136,0,0.9);
+    }
+    #entry arrow:hover {
+        font-weight: bold;
+        color: #80ff80;
+    }
+
+    /*Subitem background*/
+    #expander-box {
+        margin: 2px;
+        border-radius: 24px;
+        background-color: rgba(26,30,36,0.01);
+    }

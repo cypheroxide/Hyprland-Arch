@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Power menu choices
+choices="Lock
+Suspend
+Restart
+Shutdown"
+
+# Show fuzzel menu with dark theme, golden text, and 80% transparency
+choice="$(printf "%b" "$choices" | fuzzel --dmenu \
+    --prompt='Power ' \
+    --lines=4 \
+    --width=20 \
+    --background-color='000000cc' \
+    --text-color='ffd700ff' \
+    --selection-color='333333cc' \
+    --selection-text-color='ffd700ff' \
+    --border-color='ffd70080' \
+    --border-width=2)"
+
+# Handle the selection
+case "${choice:-}" in
+    Lock)
+        if command -v hyprlock >/dev/null 2>&1; then 
+            hyprlock
+        elif command -v loginctl >/dev/null 2>&1; then 
+            loginctl lock-session
+        elif command -v swaylock >/dev/null 2>&1; then 
+            swaylock -f
+        fi
+        ;;
+    Suspend) 
+        systemctl suspend 
+        ;;
+    Restart) 
+        systemctl reboot 
+        ;;
+    Shutdown) 
+        systemctl poweroff 
+        ;;
+    *) 
+        exit 0 
+        ;;
+esac

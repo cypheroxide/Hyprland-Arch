@@ -1,0 +1,48 @@
+[flavor]
+light = "cool-night"
+dark = "cool-night"
+
+# Custom Nerd Font OUTLINE icons
+[icon]
+prepend_dirs = [
+	{ name = ".config/",   text = "󰉋" },
+	{ name = "Desktop/",   text = "󰚝" },
+	{ name = "Documents/", text = "󰈙" },
+	{ name = "Downloads/", text = "󰉍" },
+	{ name = "Music/",     text = "󰝚" },
+	{ name = "Pictures/",  text = "󰉏" },
+	{ name = "Videos/",    text = "󰈫" },
+	{ name = ".git/",      text = "󰊢" },
+    { name = "Code/",      text = "󰊢" },
+	{ name = "*/",         text = "󰉋" },
+]
+
+prepend_files = [
+	# Documents
+	{ name = "*.pdf",  text = "󰈦" },
+	{ name = "*.txt",  text = "󰈙" },
+	{ name = "*.md",   text = "󰍔" },
+	{ name = "*.doc",  text = "󰈙" },
+	{ name = "*.docx", text = "󰈙" },
+	# Code
+	{ name = "*.lua",  text = "󰈸" },
+	{ name = "*.py",   text = "󰈸" },
+	{ name = "*.rs",   text = "󰈸" },
+	{ name = "*.go",   text = "󰈸" },
+	{ name = "*.js",   text = "󰈸" },
+	{ name = "*.sh",   text = "󰈸" },
+	# Media
+	{ name = "*.mp3",  text = "󰎈" },
+	{ name = "*.mp4",  text = "󰗀" },
+	{ name = "*.mkv",  text = "󰗀" },
+	# Images
+	{ name = "*.png",  text = "󰋩" },
+	{ name = "*.jpg",  text = "󰋩" },
+	{ name = "*.svg",  text = "󰋩" },
+	# Archives
+	{ name = "*.zip",  text = "󰗄" },
+	{ name = "*.tar",  text = "󰗄" },
+	{ name = "*.gz",   text = "󰗄" },
+	# Default
+	{ name = "*",      text = "󰈔" },
+]

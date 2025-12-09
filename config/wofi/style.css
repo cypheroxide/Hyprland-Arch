@@ -1,0 +1,156 @@
+* {
+    font-family: DejaVu Sans Mono; 
+    /*font-size: 20px;            [>v1.4.1,font is written here and the window is randomly offset<]*/
+    border: none;
+}
+
+/*Global Window*/
+window {
+    margin: 0px;
+    font-size: 20px;            /*v1.4.1,font-size is written here to ensure the window is centered every time*/
+    border-radius: 7px;
+    border: 2px solid rgba(255,215,0,0.5);  /* ffd70080 - golden border */
+    background-color: rgba(0,0,0,0.8);      /* 000000cc - black with transparency */
+}
+
+/*Search box*/
+#input {
+    margin: 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,215,0,0.5);  /* ffd70080 - golden border */
+    background-color: rgba(0,0,0,0.1);
+    font-size: 28px;
+    font-weight: normal;
+    color: #ffd700;                          /* ffd700ff - golden text */
+}
+
+/*Search box icon color*/
+#input image {
+    border: none;
+    color: #ffd700;                          /* ffd700ff - golden icon */
+}
+
+/*Special effects when focusing on the search box*/
+#input:focus {
+      box-shadow: 
+      rgba(255,215,0,0.4) 0px 0px 10px 2px, 
+      rgba(255,215,0, 0.65) 0px 8px 6px -1px, 
+      rgba(255,215,0, 0.8) 0px 1px 0px inset;
+  }
+
+
+/*list*/
+#inner-box {
+    margin: 5px;
+    border: 2px solid rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+}
+
+/*background*/
+#outer-box {
+    margin: 0px;
+    border: 3px solid rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+}
+
+/*list border*/
+#scroll {
+    margin: 1px;
+    border: 2px solid rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0);
+}
+
+/*fonts in the list*/
+#text {
+    color: #ffd700;                          /* ffd700ff - golden text */
+    margin: 5px;
+}
+
+/*icon*/
+#entry image {
+    padding-right: 3px;
+    /*border: 2px solid cyan;*/
+    background-color: transparent;
+}
+
+/*The second color in the list is superimposed on the backgroun color in the window*/
+*#entry:nth-child(even){
+    /*border: 1px solid rgba(15,21,70,0.8);*/
+    background-color: rgba(0,0,0,0.1);
+}
+
+/*Selected theme*/
+#entry:selected {
+    margin: 0px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,215,0,0.5);  /* ffd70080 - golden border */
+    background-color: rgba(51,51,51,0.8);   /* 333333cc - dark gray selection */
+}
+
+/*Font settings for the selected item*/
+#text:selected {
+    margin: 5px;
+    color: #ffd700;                          /* ffd700ff - golden text */
+    font-size: 22px;
+    font-weight: bold;
+}
+/*Selected item's font*/
+/*#entry:selected #text {*/
+    /*font-size: 22px;*/
+    /*font-weight: bold;*/
+    /*color: rgba(0,170,170,0.8);*/
+/*}*/
+
+
+    /*Subitems of the entry*/
+    #entry.activatable {
+        /*border: 2px solid yellow;*/
+        margin: 2px;
+        border-radius: 24px;
+        background-color: rgba(0,0,0,0.1);
+        /*border-bottom-width: 1px; */
+        /*border-bottom-color: cyan; */
+        /*border-bottom-style: solid; */
+        /*border-top-width: 1px; */
+        /*border-top-color: cyan; */
+        /*border-top-style: solid; */
+    }
+
+    /*Sub-item font color*/
+    #entry.activatable #text {
+        color: #ffd700;                          /* ffd700ff - golden text */
+        font-size: 20px;
+        font-weight: normal;
+        font-style: italic;
+    }
+
+    /*Selected item of sub-item*/
+    #entry.activatable:selected {
+        border: 1px solid rgba(255,215,0,0.5);  /* ffd70080 - golden border */
+        background-color: rgba(51,51,51,0.8);   /* 333333cc - dark gray selection */
+    }
+
+    /*Font color of the selected sub-item*/
+    #entry.activatable:selected #text {
+        font-size: 22px;
+        font-style: normal;
+        font-weight: bold;
+        color: #ffd700;                          /* ffd700ff - golden text */
+    }
+
+    /*Subproject>Expand symbol*/
+    #entry arrow {
+        font-weight: bold;
+        color: #ffd700;                          /* ffd700ff - golden arrow */
+    }
+    #entry arrow:hover {
+        font-weight: bold;
+        color: rgba(255,215,0,0.8);             /* slightly transparent golden on hover */
+    }
+
+    /*Subitem background*/
+    #expander-box {
+        margin: 2px;
+        border-radius: 24px;
+        background-color: rgba(26,30,36,0.01);
+    }

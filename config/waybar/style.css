@@ -1,0 +1,149 @@
+/* Global Settings */
+* {
+  font-family: "CaskaydiaCove Nerd Font", "JetBrainsMono Nerd Font", "Symbols Nerd Font", "Font Awesome 6 Free", "Font Awesome 6 Free Solid", "Noto Color Emoji", "DejaVu Sans";
+  font-weight: bold;
+  font-size: 14px;
+  color: #dcdfe1;
+}
+
+/* Transparent Waybar Background */
+#waybar {
+  background: transparent;
+  border: rgb(212, 212, 15);
+  box-shadow: none;
+  min-height: 0px;
+}
+
+/* All modules have a unified style */
+#workspaces,
+#window,
+#tray{
+  /*background-color: rgba(29,31,46, 0.95);*/
+  background-color: rgba(15,27,53,0.9);
+  padding: 4px 6px; /* Maintain internal spacing */
+  margin-top: 2px; /* Increased external spacing */
+  margin-left: 4px; /* Increased external spacing */
+  margin-right: 4px; /* Increased external spacing */
+  border-radius: 8px;
+  border-width: 0px;
+}
+
+@keyframes blink-update {
+	to {
+		background-color: dodgerblue;
+	}
+}
+
+#custom-pacman {
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+}
+#custom-pacman.pending-updates {
+	animation-name: blink-update;
+	animation-duration: 3s;
+}
+
+#custom-pomodoro{
+  background-color: rgba(15,27,53,0.9);
+  margin-top: 6px; /* Keep some distance from the top of the screen */
+  /*margin-bottom: 4px;*/
+  padding: 4px 2px; /* Maintain internal spacing */
+  border-radius: 10px 0 0 10px;
+  border-width: 0px;
+}
+
+#clock,
+#custom-power{
+  background-color: rgba(15,27,53,0.9);
+  margin-top: 6px; /* Keep some distance from the top of the screen */
+  margin-right: 6px;
+  /*margin-bottom: 4px;*/
+  padding: 4px 2px; /* Maintain internal spacing */
+  border-radius: 0 10px 10px 0;
+  border-width: 0px;
+}
+
+#network,
+#custom-lock{
+  background-color: rgba(15,27,53,0.9);
+  margin-top: 6px; /* Keep some distance from the top of the screen */
+  margin-left: 6px;
+  /*margin-bottom: 4px;*/
+  padding: 4px 2px; /* Maintain internal spacing */
+  border-radius: 10px 0 0 10px;
+  border-width: 0px;
+}
+
+#custom-reboot,
+#bluetooth,
+#battery,
+#pulseaudio,
+#pulseaudio.source,
+#backlight,
+#custom-temperature,
+#memory,
+#cpu{
+  background-color: rgba(15,27,53,0.9);
+  margin-top: 6px; /* Keep some distance from the top of the screen */
+  /*margin-bottom: 4px;*/
+  padding: 4px 2px; /* Maintain internal spacing */
+  border-width: 0px;
+}
+
+#custpm-temperature.critical,
+#pulseaudio.muted {
+  color: #FF0000;
+  padding-top: 0;
+}
+
+/* Mouse over to brighten */
+#bluetooth:hover,
+#network:hover,
+/*#tray:hover,*/
+#backlight:hover,
+#battery:hover,
+#pulseaudio:hover,
+#pulseaudio.source:hover,
+#custom-temperature:hover,
+#memory:hover,
+#cpu:hover,
+#clock:hover,
+#custom-lock:hover,
+#custom-reboot:hover,
+#custom-power:hover,
+/*#workspaces:hover,*/
+#window:hover {
+  background-color: rgba(70, 75, 90, 0.9);
+}
+
+/* The active state of the workspace is highlighted */
+#workspaces button:hover{
+  background-color: rgba(97, 175, 239, 0.2);
+  padding: 0px 6px;
+  margin: 0 2px;
+  border-radius: 10px;
+}
+
+#workspaces button.active {
+  background-color: #61afef; /* Blue highlight */
+  color: #ffffff;
+  padding: 0px 6px;
+  margin: 0 2px;
+  border-radius: 10px;
+}
+
+/* Workspace button is not activated */
+#workspaces button {
+  background: transparent;
+  border: none;
+  color: #888888;
+  padding: 0px 6px;
+  margin: 0 2px;
+  font-weight: bold;
+}
+
+#window {
+  font-weight: 500;
+  font-style: italic;
+}

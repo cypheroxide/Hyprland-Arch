@@ -1,0 +1,119 @@
+# Custom Nerd Font OUTLINE icons ONLY (no filled icons)
+# BeautyLine-inspired color scheme: blue folders, green docs, red/pink media, purple archives, yellow images
+
+[icon]
+
+# Directories - ALL OUTLINE icons
+dirs = [
+	{ name = ".config/",   text = "󰉋" },  # nf-md-folder_outline
+	{ name = "Desktop/",   text = "󰚝" },  # nf-md-monitor_dashboard
+	{ name = "Documents/", text = "󰈙" },  # nf-md-file_document_outline (folder version)
+	{ name = "Downloads/", text = "󰉍" },  # nf-md-folder_download_outline
+	{ name = "Music/",     text = "󰝚" },  # nf-md-music_box_outline
+	{ name = "Pictures/",  text = "󰉏" },  # nf-md-folder_image_outline (if exists) or image_outline
+	{ name = "Videos/",    text = "󰈫" },  # nf-md-filmstrip_box (outline variant)
+	{ name = ".git/",      text = "󰊢" },  # nf-md-git
+	{ name = "*/",         text = "󰉋" },  # nf-md-folder_outline (default)
+]
+
+# Files - ALL OUTLINE icons only
+files = [
+	# Documents - OUTLINE icons (green #9ece6a)
+	{ name = "*.pdf",  text = "󰈦" },  # nf-md-file_pdf_box (outline version)
+	{ name = "*.txt",  text = "󰈙" },  # nf-md-file_document_outline
+	{ name = "*.md",   text = "󰍔" },  # nf-md-language_markdown_outline
+	{ name = "*.doc",  text = "󰈙" },  # nf-md-file_document_outline
+	{ name = "*.docx", text = "󰈙" },
+	{ name = "*.rtf",  text = "󰈙" },
+	{ name = "*.odt",  text = "󰈙" },
+	{ name = "*.csv",  text = "󱘖" },  # nf-md-file_table_outline
+	{ name = "*.xlsx", text = "󱘖" },
+	
+	# Code files - OUTLINE icons (blue #7aa2f7)
+	{ name = "*.lua",  text = "󰈸" },  # nf-md-file_code_outline
+	{ name = "*.py",   text = "󰈸" },
+	{ name = "*.rs",   text = "󰈸" },
+	{ name = "*.go",   text = "󰈸" },
+	{ name = "*.c",    text = "󰈸" },
+	{ name = "*.cpp",  text = "󰈸" },
+	{ name = "*.h",    text = "󰈸" },
+	{ name = "*.hpp",  text = "󰈸" },
+	{ name = "*.js",   text = "󰈸" },
+	{ name = "*.ts",   text = "󰈸" },
+	{ name = "*.jsx",  text = "󰈸" },
+	{ name = "*.tsx",  text = "󰈸" },
+	{ name = "*.sh",   text = "󰈸" },
+	{ name = "*.zsh",  text = "󰈸" },
+	{ name = "*.bash", text = "󰈸" },
+	{ name = "*.fish", text = "󰈸" },
+	{ name = "*.java", text = "󰈸" },
+	{ name = "*.rb",   text = "󰈸" },
+	{ name = "*.php",  text = "󰈸" },
+	
+	# Config files - OUTLINE icons (blue #7aa2f7)
+	{ name = "*.toml", text = "󰈸" },  # nf-md-file_code_outline
+	{ name = "*.json", text = "󰈸" },
+	{ name = "*.yaml", text = "󰈸" },
+	{ name = "*.yml",  text = "󰈸" },
+	{ name = "*.conf", text = "󰈸" },
+	{ name = "*.ini",  text = "󰈸" },
+	{ name = "*.xml",  text = "󰈸" },
+	{ name = "*.cfg",  text = "󰈸" },
+	
+	# Media - Audio - OUTLINE icons (red/pink #f7768e)
+	{ name = "*.mp3",  text = "󰎈" },  # nf-md-file_music_outline
+	{ name = "*.flac", text = "󰎈" },
+	{ name = "*.wav",  text = "󰎈" },
+	{ name = "*.ogg",  text = "󰎈" },
+	{ name = "*.m4a",  text = "󰎈" },
+	{ name = "*.aac",  text = "󰎈" },
+	{ name = "*.opus", text = "󰎈" },
+	{ name = "*.wma",  text = "󰎈" },
+	
+	# Media - Video - OUTLINE icons (red/pink #f7768e)
+	{ name = "*.mp4",  text = "󰗀" },  # nf-md-file_video_outline
+	{ name = "*.mkv",  text = "󰗀" },
+	{ name = "*.avi",  text = "󰗀" },
+	{ name = "*.webm", text = "󰗀" },
+	{ name = "*.mov",  text = "󰗀" },
+	{ name = "*.flv",  text = "󰗀" },
+	{ name = "*.wmv",  text = "󰗀" },
+	{ name = "*.m4v",  text = "󰗀" },
+	
+	# Images - OUTLINE icons (yellow #e0af68)
+	{ name = "*.png",  text = "󰋩" },  # nf-md-file_image_outline
+	{ name = "*.jpg",  text = "󰋩" },
+	{ name = "*.jpeg", text = "󰋩" },
+	{ name = "*.gif",  text = "󰋩" },
+	{ name = "*.svg",  text = "󰋩" },
+	{ name = "*.webp", text = "󰋩" },
+	{ name = "*.bmp",  text = "󰋩" },
+	{ name = "*.ico",  text = "󰋩" },
+	{ name = "*.tiff", text = "󰋩" },
+	{ name = "*.tif",  text = "󰋩" },
+	
+	# Archives - OUTLINE icons (purple #bb9af7)
+	{ name = "*.zip",  text = "󰗄" },  # nf-md-archive_outline
+	{ name = "*.7z",   text = "󰗄" },
+	{ name = "*.tar",  text = "󰗄" },
+	{ name = "*.gz",   text = "󰗄" },
+	{ name = "*.bz2",  text = "󰗄" },
+	{ name = "*.xz",   text = "󰗄" },
+	{ name = "*.rar",  text = "󰗄" },
+	{ name = "*.tgz",  text = "󰗄" },
+	{ name = "*.tar.gz", text = "󰗄" },
+	{ name = "*.tar.xz", text = "󰗄" },
+	
+	# Special files - OUTLINE icons
+	{ name = "*.git",      text = "󰊢" },  # nf-md-git
+	{ name = ".gitignore", text = "󰊢" },
+	{ name = ".gitmodules", text = "󰊢" },
+	{ name = "LICENSE",    text = "󰿃" },  # nf-md-license
+	{ name = "README.md",  text = "󰍔" },  # nf-md-language_markdown_outline
+	{ name = "README",     text = "󰈙" },  # nf-md-file_document_outline
+	{ name = "Makefile",   text = "󰚩" },  # nf-md-hammer_outline (if exists)
+	{ name = "Dockerfile", text = "󰡨" },  # nf-md-docker
+	
+	# Default fallback - OUTLINE icon
+	{ name = "*",      text = "󰈔" },  # nf-md-file_outline
+]

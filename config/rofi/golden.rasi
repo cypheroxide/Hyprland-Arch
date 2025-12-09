@@ -1,0 +1,100 @@
+/**
+ * Golden theme for rofi - matches power menu colors
+ */
+
+* {
+    /* Golden color scheme matching power menu */
+    background-color:           rgba(0, 0, 0, 0.8);        /* 000000cc */
+    foreground:                 #ffd700;                    /* ffd700ff - gold text */
+    normal-background:          rgba(0, 0, 0, 0);
+    normal-foreground:          #ffd700;
+    selected-background:        rgba(51, 51, 51, 0.8);     /* 333333cc */
+    selected-foreground:        #ffd700;                    /* ffd700ff */
+    border-color:               rgba(255, 215, 0, 0.5);    /* ffd70080 */
+    
+    font: "DejaVu Sans Mono 12";
+}
+
+window {
+    background-color: @background-color;
+    border: 2;
+    border-color: @border-color;
+    border-radius: 7px;
+    padding: 5;
+    width: 30%;
+}
+
+mainbox {
+    border: 0;
+    padding: 0;
+}
+
+inputbar {
+    children: [ prompt, textbox-prompt-colon, entry ];
+    spacing: 0;
+    text-color: @foreground;
+    padding: 8px;
+    border: 0 0 1px;
+    border-color: @border-color;
+}
+
+prompt {
+    spacing: 0;
+    text-color: @foreground;
+}
+
+textbox-prompt-colon {
+    expand: false;
+    str: ": ";
+    margin: 0px 0.3em 0em 0em;
+    text-color: @foreground;
+}
+
+entry {
+    spacing: 0;
+    text-color: @foreground;
+    placeholder-color: rgba(255, 215, 0, 0.5);
+}
+
+listview {
+    fixed-height: 0;
+    border: 0;
+    spacing: 2px;
+    scrollbar: false;
+    padding: 8px 0px 0px;
+}
+
+element {
+    border: 0;
+    padding: 8px;
+    border-radius: 4px;
+}
+
+element-text {
+    background-color: inherit;
+    text-color: inherit;
+}
+
+element.normal.normal {
+    background-color: @normal-background;
+    text-color: @normal-foreground;
+}
+
+element.selected.normal {
+    background-color: @selected-background;
+    text-color: @selected-foreground;
+    border-color: @border-color;
+    border-width: 1px;
+}
+
+element.alternate.normal {
+    background-color: @normal-background;
+    text-color: @normal-foreground;
+}
+
+scrollbar {
+    width: 4px;
+    border: 0;
+    handle-width: 8px;
+    padding: 0;
+}

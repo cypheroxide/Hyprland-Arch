@@ -1,0 +1,90 @@
+-- ~/.config/yazi/init.lua
+-- Custom icon configuration with Nerd Font outline glyphs
+-- Colors inspired by BeautyLine icon theme + Tokyo Night palette
+
+-- File type icons using Material Design outline icons from Nerd Fonts
+require("yazi").setup({
+	icons = {
+		-- Directories
+		dir = {
+			default = "󰉋",  -- nf-md-folder_outline
+			open = "󱞫",     -- nf-md-folder_open_outline  
+			symlink = "󰉒", -- nf-md-folder_symlink
+		},
+
+		-- Special directories
+		dir_special = {
+			Desktop = { icon = "󰇄", color = "#7aa2f7" },      -- nf-md-desktop
+			Documents = { icon = "󰉖", color = "#9ece6a" },    -- nf-md-folder_text
+			Downloads = { icon = "󰉕", color = "#bb9af7" },    -- nf-md-folder_download
+			Music = { icon = "󰉓", color = "#f7768e" },        -- nf-md-folder_music
+			Pictures = { icon = "󰉔", color = "#e0af68" },     -- nf-md-folder_image
+			Videos = { icon = "󰕧", color = "#f7768e" },       -- nf-md-folder_video
+		},
+
+		-- File types by extension
+		exts = {
+			-- Documents
+			pdf = { icon = "󰈦", color = "#9ece6a" },          -- nf-md-file_pdf_box
+			txt = { icon = "󰈙", color = "#9ece6a" },          -- nf-md-file_document_outline
+			md = { icon = "󰍔", color = "#9ece6a" },           -- nf-md-language_markdown_outline
+			doc = { icon = "󰈙", color = "#9ece6a" },
+			docx = { icon = "󰈙", color = "#9ece6a" },
+			rtf = { icon = "󰈙", color = "#9ece6a" },
+			csv = { icon = "󱘖", color = "#9ece6a" },          -- nf-md-file_table_outline
+			
+			-- Code files
+			lua = { icon = "󰈸", color = "#7aa2f7" },          -- nf-md-file_code_outline
+			py = { icon = "󰈸", color = "#7aa2f7" },
+			rs = { icon = "󰈸", color = "#7aa2f7" },
+			go = { icon = "󰈸", color = "#7aa2f7" },
+			c = { icon = "󰈸", color = "#7aa2f7" },
+			cpp = { icon = "󰈸", color = "#7aa2f7" },
+			h = { icon = "󰈸", color = "#7aa2f7" },
+			js = { icon = "󰈸", color = "#7aa2f7" },
+			ts = { icon = "󰈸", color = "#7aa2f7" },
+			sh = { icon = "󰈸", color = "#7aa2f7" },
+			zsh = { icon = "󰈸", color = "#7aa2f7" },
+			
+			-- Config files
+			toml = { icon = "󰈸", color = "#7aa2f7" },
+			json = { icon = "󰈸", color = "#7aa2f7" },
+			yaml = { icon = "󰈸", color = "#7aa2f7" },
+			yml = { icon = "󰈸", color = "#7aa2f7" },
+			conf = { icon = "󰈸", color = "#7aa2f7" },
+			ini = { icon = "󰈸", color = "#7aa2f7" },
+			
+			-- Media - Audio
+			mp3 = { icon = "󰎈", color = "#f7768e" },          -- nf-md-file_music_outline
+			flac = { icon = "󰎈", color = "#f7768e" },
+			wav = { icon = "󰎈", color = "#f7768e" },
+			ogg = { icon = "󰎈", color = "#f7768e" },
+			m4a = { icon = "󰎈", color = "#f7768e" },
+			
+			-- Media - Video
+			mp4 = { icon = "󰗀", color = "#f7768e" },          -- nf-md-file_video_outline
+			mkv = { icon = "󰗀", color = "#f7768e" },
+			avi = { icon = "󰗀", color = "#f7768e" },
+			webm = { icon = "󰗀", color = "#f7768e" },
+			mov = { icon = "󰗀", color = "#f7768e" },
+			
+			-- Images
+			png = { icon = "󰋩", color = "#e0af68" },          -- nf-md-file_image_outline
+			jpg = { icon = "󰋩", color = "#e0af68" },
+			jpeg = { icon = "󰋩", color = "#e0af68" },
+			gif = { icon = "󰋩", color = "#e0af68" },
+			svg = { icon = "󰋩", color = "#e0af68" },
+			webp = { icon = "󰋩", color = "#e0af68" },
+			bmp = { icon = "󰋩", color = "#e0af68" },
+			
+			-- Archives
+			zip = { icon = "󰗄", color = "#bb9af7" },          -- nf-md-archive_outline
+			["7z"] = { icon = "󰗄", color = "#bb9af7" },
+			tar = { icon = "󰗄", color = "#bb9af7" },
+			gz = { icon = "󰗄", color = "#bb9af7" },
+			bz2 = { icon = "󰗄", color = "#bb9af7" },
+			xz = { icon = "󰗄", color = "#bb9af7" },
+			rar = { icon = "󰗄", color = "#bb9af7" },
+		},
+	},
+})

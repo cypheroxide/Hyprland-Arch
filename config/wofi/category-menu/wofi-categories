@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Wofi category menu launcher
+# Two-step navigation with back button: select category, then select application
+
+set -euo pipefail
+
+# Ensure caches are fresh (non-blocking)
+~/.local/bin/appmenu-index generate --quiet || true
+
+# Main loop for navigation
+while true; do
+    # Step 1: Select category
+    cat_list=$(~/.local/bin/appmenu-index print-categories)
+    [ -z "$cat_list" ] && exit 0
+    
+    sel_cat=$(printf "%s\n" "$cat_list" | wofi --dmenu --prompt "Categories" --config ~/.config/wofi/kira/config --style ~/.config/wofi/style.css || true)
+    [ -z "$sel_cat" ] && exit 0
+    
+    # Step 2: Select application from category (with back button)
+    apps_list=$(~/.local/bin/appmenu-index print-apps --category "$sel_cat")
+    [ -z "$apps_list" ] && continue
+    
+    # Add back button at the top
+    sel_app=$(printf "⟵ Back\n%s\n" "$apps_list" | wofi --dmenu --prompt "$sel_cat" --config ~/.config/wofi/kira/config --style ~/.config/wofi/style.css || true)
+    
+    # Handle selection
+    if [ -z "$sel_app" ]; then
+        # User cancelled - exit
+        exit 0
+    elif [ "$sel_app" = "⟵ Back" ]; then
+        # User selected back - loop to category selection
+        continue
+    else
+        # User selected an app - launch it
+        desktop_id=$(printf "%s" "$sel_app" | sed 's/.*\[//; s/\]//')
+        ~/.local/bin/appmenu-index launch --id "$desktop_id"
+        exit 0
+    fi
+done
