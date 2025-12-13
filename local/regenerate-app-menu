@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Manual app menu regeneration helper
+exec ~/.local/bin/appmenu-index generate "$@"

@@ -1,0 +1,491 @@
+#!/usr/bin/env python3
+"""
+appmenu-index: Hierarchical category menu generator for wofi/rofi
+Parses .desktop files, manages categories, and provides launch interfaces
+"""
+
+import os
+import sys
+import json
+import glob
+import shutil
+import subprocess
+import argparse
+from pathlib import Path
+from collections import defaultdict
+import re
+
+try:
+    import yaml
+except ImportError:
+    print("Error: python-yaml is required. Install with: sudo pacman -S python-yaml", file=sys.stderr)
+    sys.exit(1)
+
+
+class AppMenuIndex:
+    def __init__(self, config_path=None):
+        self.home = Path.home()
+        self.config_path = config_path or self.home / ".config/appmenu/config.yaml"
+        self.cache_dir = self.home / ".cache/appmenu"
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        
+        self.index_cache = self.cache_dir / "index.json"
+        self.categories_cache = self.cache_dir / "categories.json"
+        self.generated_dir = self.home / ".local/share/applications/appmenu-generated"
+        self.generated_dir.mkdir(parents=True, exist_ok=True)
+        
+        self.config = self.load_config()
+        self.rofi_state_file = self.cache_dir / f"rofi_state_{os.getenv('ROFI_PID', 'default')}"
+        
+    def load_config(self):
+        """Load YAML configuration"""
+        if not self.config_path.exists():
+            print(f"Error: Config file not found: {self.config_path}", file=sys.stderr)
+            sys.exit(1)
+        
+        with open(self.config_path) as f:
+            return yaml.safe_load(f)
+    
+    def expand_path(self, path):
+        """Expand ~ and environment variables in paths"""
+        return Path(os.path.expandvars(os.path.expanduser(path)))
+    
+    def find_in_path(self, executable):
+        """Check if executable exists in PATH or as absolute path"""
+        if os.path.isabs(executable):
+            return os.path.isfile(executable) and os.access(executable, os.X_OK)
+        return shutil.which(executable) is not None
+    
+    def parse_desktop_file(self, filepath):
+        """Parse a .desktop file and extract relevant fields"""
+        app = {
+            'id': Path(filepath).name,
+            'path': str(filepath),
+            'name': '',
+            'exec': '',
+            'icon': '',
+            'comment': '',
+            'generic_name': '',
+            'categories': [],
+            'terminal': False,
+            'nodisplay': False,
+            'hidden': False,
+            'tryexec': None
+        }
+        
+        try:
+            with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+                in_desktop_entry = False
+                for line in f:
+                    line = line.strip()
+                    if line == '[Desktop Entry]':
+                        in_desktop_entry = True
+                        continue
+                    elif line.startswith('[') and line.endswith(']'):
+                        in_desktop_entry = False
+                        continue
+                    
+                    if not in_desktop_entry or not line or line.startswith('#'):
+                        continue
+                    
+                    if '=' not in line:
+                        continue
+                    
+                    key, _, value = line.partition('=')
+                    key = key.strip()
+                    value = value.strip()
+                    
+                    if key == 'Name':
+                        app['name'] = value
+                    elif key == 'Exec':
+                        app['exec'] = value
+                    elif key == 'Icon':
+                        app['icon'] = value
+                    elif key == 'Comment':
+                        app['comment'] = value
+                    elif key == 'GenericName':
+                        app['generic_name'] = value
+                    elif key == 'Categories':
+                        app['categories'] = [c.strip() for c in value.split(';') if c.strip()]
+                    elif key == 'Terminal':
+                        app['terminal'] = value.lower() == 'true'
+                    elif key == 'NoDisplay':
+                        app['nodisplay'] = value.lower() == 'true'
+                    elif key == 'Hidden':
+                        app['hidden'] = value.lower() == 'true'
+                    elif key == 'TryExec':
+                        app['tryexec'] = value
+        except Exception as e:
+            print(f"Warning: Failed to parse {filepath}: {e}", file=sys.stderr)
+            return None
+        
+        # Filter based on config
+        if self.config.get('exclude_nodisplay', True) and app['nodisplay']:
+            return None
+        if self.config.get('exclude_hidden', True) and app['hidden']:
+            return None
+        if self.config.get('validate_tryexec', True) and app['tryexec']:
+            if not self.find_in_path(app['tryexec']):
+                return None
+        
+        if not app['name'] or not app['exec']:
+            return None
+        
+        return app
+    
+    def generate_appimage_desktop(self, appimage_path):
+        """Generate a .desktop file for an AppImage"""
+        appimage_path = Path(appimage_path)
+        name = appimage_path.stem
+        
+        # Clean up name (remove version info, underscores, etc.)
+        name = re.sub(r'[-_]?\d+\.\d+.*$', '', name)
+        name = name.replace('_', ' ').replace('-', ' ')
+        name = ' '.join(word.capitalize() for word in name.split())
+        
+        desktop_id = f"appimage-{appimage_path.stem}.desktop"
+        desktop_path = self.generated_dir / desktop_id
+        
+        # Check if already exists
+        if desktop_path.exists():
+            return str(desktop_path)
+        
+        content = f"""[Desktop Entry]
+Type=Application
+Name={name}
+Exec={appimage_path}
+Icon=application-x-executable
+Categories={self.config['appimages']['category']};
+Comment=AppImage: {name}
+Terminal=false
+"""
+        
+        with open(desktop_path, 'w') as f:
+            f.write(content)
+        
+        return str(desktop_path)
+    
+    def generate_custom_app_desktop(self, app_config):
+        """Generate a .desktop file for a custom application"""
+        desktop_id = app_config['id']
+        desktop_path = self.generated_dir / desktop_id
+        
+        if desktop_path.exists():
+            return str(desktop_path)
+        
+        name = app_config['name']
+        exec_cmd = app_config['exec']
+        description = app_config.get('description', '')
+        icon = app_config.get('icon', 'application-x-executable')
+        categories = ';'.join(app_config.get('categories', ['Utility'])) + ';'
+        terminal = str(app_config.get('terminal', False)).lower()
+        
+        content = f"""[Desktop Entry]
+Type=Application
+Name={name}
+Exec={exec_cmd}
+Icon={icon}
+Categories={categories}
+Comment={description}
+Terminal={terminal}
+"""
+        
+        with open(desktop_path, 'w') as f:
+            f.write(content)
+        
+        return str(desktop_path)
+    
+    def discover_applications(self):
+        """Discover all applications from configured sources"""
+        apps = []
+        
+        # Scan configured sources
+        for source in self.config.get('sources', []):
+            source_path = self.expand_path(source)
+            if not source_path.exists():
+                continue
+            
+            for desktop_file in source_path.glob('*.desktop'):
+                app = self.parse_desktop_file(desktop_file)
+                if app:
+                    apps.append(app)
+        
+        # Generate and scan AppImages
+        if 'appimages' in self.config and self.config['appimages'].get('generate_desktop_entries', False):
+            for path in self.config['appimages'].get('paths', []):
+                appimage_dir = self.expand_path(path)
+                if not appimage_dir.exists():
+                    continue
+                
+                for appimage in appimage_dir.glob('*.AppImage'):
+                    if appimage.is_file() and os.access(appimage, os.X_OK):
+                        desktop_path = self.generate_appimage_desktop(appimage)
+                        app = self.parse_desktop_file(desktop_path)
+                        if app:
+                            apps.append(app)
+        
+        # Generate custom apps
+        for app_config in self.config.get('custom_apps', []):
+            desktop_path = self.generate_custom_app_desktop(app_config)
+            app = self.parse_desktop_file(desktop_path)
+            if app:
+                apps.append(app)
+        
+        return apps
+    
+    def normalize_categories(self, app):
+        """Normalize and map categories to top-level categories"""
+        aliases = self.config.get('category_aliases', {})
+        top_categories = self.config.get('top_categories_order', [])
+        
+        normalized = set()
+        
+        for cat in app['categories']:
+            # Check if it's in top categories
+            if cat in top_categories:
+                normalized.add(cat)
+            # Check if there's an alias
+            elif cat in aliases:
+                mapped = aliases[cat]
+                if mapped in top_categories:
+                    normalized.add(mapped)
+        
+        # Fallback to Utility if no valid categories
+        if not normalized:
+            normalized.add('Utility')
+        
+        return list(normalized)
+    
+    def build_index(self, apps):
+        """Build application index with normalized categories"""
+        index = []
+        
+        for app in apps:
+            # Get description
+            desc_fields = self.config.get('description_fields', ['Comment', 'GenericName'])
+            description = ''
+            for field in desc_fields:
+                if field == 'Comment' and app['comment']:
+                    description = app['comment']
+                    break
+                elif field == 'GenericName' and app['generic_name']:
+                    description = app['generic_name']
+                    break
+            
+            # Normalize categories
+            categories = self.normalize_categories(app)
+            
+            index.append({
+                'id': app['id'],
+                'name': app['name'],
+                'description': description,
+                'icon': app['icon'] or 'application-x-executable',
+                'categories': categories,
+                'exec': app['exec'],
+                'terminal': app['terminal']
+            })
+        
+        return index
+    
+    def build_categories(self, index):
+        """Build category-organized app lists"""
+        categories = defaultdict(list)
+        top_order = self.config.get('top_categories_order', [])
+        
+        for app in index:
+            display = app['name']
+            if app['description']:
+                display = f"{app['name']} ({app['description']})"
+            
+            for cat in app['categories']:
+                categories[cat].append({
+                    'display': display,
+                    'id': app['id'],
+                    'icon': app['icon']
+                })
+        
+        # Sort apps within categories alphabetically
+        for cat in categories:
+            categories[cat] = sorted(categories[cat], key=lambda x: x['display'].lower())
+        
+        # Order categories
+        ordered_categories = {}
+        for cat in top_order:
+            if cat in categories:
+                ordered_categories[cat] = categories[cat]
+        
+        return ordered_categories
+    
+    def generate(self, force=False, quiet=False):
+        """Generate application index and category caches"""
+        # Check if regeneration is needed
+        if not force and self.index_cache.exists():
+            try:
+                with open(self.index_cache) as f:
+                    cached = json.load(f)
+                    # For now, we'll regenerate if explicitly asked
+                    # In production, you'd check mtimes of source directories
+                    if not quiet:
+                        print("Caches exist. Use --force to regenerate.")
+                    return
+            except:
+                pass
+        
+        if not quiet:
+            print("Generating application index...")
+        
+        # Clean up old generated entries (optional)
+        # for old_file in self.generated_dir.glob('*.desktop'):
+        #     old_file.unlink()
+        
+        apps = self.discover_applications()
+        index = self.build_index(apps)
+        categories = self.build_categories(index)
+        
+        # Write caches
+        with open(self.index_cache, 'w') as f:
+            json.dump(index, f, indent=2)
+        
+        with open(self.categories_cache, 'w') as f:
+            json.dump(categories, f, indent=2)
+        
+        if not quiet:
+            print(f"Indexed {len(index)} applications in {len(categories)} categories")
+    
+    def load_categories(self):
+        """Load categories from cache"""
+        if not self.categories_cache.exists():
+            self.generate(quiet=True)
+        
+        with open(self.categories_cache) as f:
+            return json.load(f)
+    
+    def print_categories(self):
+        """Print categories for wofi dmenu"""
+        categories = self.load_categories()
+        
+        for cat, apps in categories.items():
+            print(f"{cat} ({len(apps)})")
+    
+    def print_apps(self, category):
+        """Print applications for a specific category"""
+        categories = self.load_categories()
+        
+        # Extract category name (remove count)
+        cat_name = category.split(' (')[0] if ' (' in category else category
+        
+        if cat_name not in categories:
+            return
+        
+        for app in categories[cat_name]:
+            # Embed desktop ID for easy extraction
+            print(f"{app['display']} [{app['id']}]")
+    
+    def rofi_mode(self):
+        """Rofi custom mode handler"""
+        categories = self.load_categories()
+        
+        rofi_retv = int(os.getenv('ROFI_RETV', '0'))
+        selected = sys.stdin.read().strip() if rofi_retv > 0 else ''
+        
+        # Load or initialize state
+        state = {'view': 'categories', 'category': None}
+        if self.rofi_state_file.exists():
+            with open(self.rofi_state_file) as f:
+                state = json.load(f)
+        
+        if rofi_retv == 1:
+            # Selection made - update state first
+            if state['view'] == 'categories':
+                # Category selected
+                cat_name = selected.split(' (')[0] if ' (' in selected else selected
+                if cat_name in categories:
+                    state['view'] = 'apps'
+                    state['category'] = cat_name
+                    with open(self.rofi_state_file, 'w') as f:
+                        json.dump(state, f)
+            else:
+                # App selected or back
+                if selected == "⟵ Back":
+                    state['view'] = 'categories'
+                    state['category'] = None
+                    with open(self.rofi_state_file, 'w') as f:
+                        json.dump(state, f)
+                else:
+                    # Launch app
+                    # Extract desktop ID from display
+                    for app in categories.get(state['category'], []):
+                        if selected.startswith(app['display'].split('[')[0].strip()):
+                            self.launch(app['id'])
+                            # Clean up state
+                            if self.rofi_state_file.exists():
+                                self.rofi_state_file.unlink()
+                            sys.exit(0)
+        
+        # Always output current state display (for both RETV=0 and after RETV=1)
+        if state['view'] == 'categories':
+            # Show categories
+            for cat, apps in categories.items():
+                print(f"{cat} ({len(apps)})")
+        else:
+            # Show apps in category
+            print("⟵ Back")
+            cat_apps = categories.get(state['category'], [])
+            for app in cat_apps:
+                print(f"{app['display']}")
+    
+    def launch(self, desktop_id):
+        """Launch an application by desktop ID"""
+        try:
+            # Use gtk-launch for proper desktop file handling
+            subprocess.Popen(['gtk-launch', desktop_id],
+                           stdout=subprocess.DEVNULL,
+                           stderr=subprocess.DEVNULL)
+        except Exception as e:
+            print(f"Error launching {desktop_id}: {e}", file=sys.stderr)
+            sys.exit(1)
+
+
+def main():
+    parser = argparse.ArgumentParser(description='Application menu index generator')
+    subparsers = parser.add_subparsers(dest='command', help='Commands')
+    
+    # Generate command
+    gen_parser = subparsers.add_parser('generate', help='Generate application index')
+    gen_parser.add_argument('--force', action='store_true', help='Force regeneration')
+    gen_parser.add_argument('--quiet', action='store_true', help='Suppress output')
+    
+    # Print categories command
+    subparsers.add_parser('print-categories', help='Print categories for wofi')
+    
+    # Print apps command
+    apps_parser = subparsers.add_parser('print-apps', help='Print apps in category')
+    apps_parser.add_argument('--category', required=True, help='Category name')
+    
+    # Rofi mode command
+    subparsers.add_parser('rofi-mode', help='Rofi custom mode handler')
+    
+    # Launch command
+    launch_parser = subparsers.add_parser('launch', help='Launch an application')
+    launch_parser.add_argument('--id', required=True, help='Desktop file ID')
+    
+    args = parser.parse_args()
+    
+    index = AppMenuIndex()
+    
+    if args.command == 'generate':
+        index.generate(force=args.force, quiet=args.quiet)
+    elif args.command == 'print-categories':
+        index.print_categories()
+    elif args.command == 'print-apps':
+        index.print_apps(args.category)
+    elif args.command == 'rofi-mode':
+        index.rofi_mode()
+    elif args.command == 'launch':
+        index.launch(args.id)
+    else:
+        parser.print_help()
+
+
+if __name__ == '__main__':
+    main()

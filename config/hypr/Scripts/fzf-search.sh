@@ -59,7 +59,7 @@ case "$MODE" in
     
     code)
         # Search in code directories
-        FIND_CMD=(find "$HOME/Code" "/mnt/Mal-2" "$HOME/AutonomousAI" -type f)
+        FIND_CMD=(find "$HOME" -type f)
         
         # Add exclusions from config
         for excl in "${EXCLUSIONS[@]}"; do
@@ -112,7 +112,7 @@ case "$MODE" in
     
     quick|*)
         # Default: quick file search in common locations
-        FIND_CMD=(find "$HOME/Documents" "$HOME/Downloads" "$HOME/Code" -maxdepth 5 -type f)
+        FIND_CMD=(find "$HOME/Documents" "$HOME/Downloads" -maxdepth 5 -type f)
         
         # Add exclusions from config
         for excl in "${EXCLUSIONS[@]}"; do
@@ -123,7 +123,7 @@ case "$MODE" in
             | fzf "${FZF_OPTS[@]}" \
                 --preview 'bat --style=numbers --color=always {} 2>/dev/null || cat {}' \
                 --preview-label='[ Preview ]' \
-                --header='Quick Search - Files in Documents/Downloads/Code')
+                --header='Quick Search - Files in Documents/Downloads')
         
         if [[ -n "$SELECTED" ]]; then
             xdg-open "$SELECTED" &

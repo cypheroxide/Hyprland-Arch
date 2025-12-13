@@ -1,0 +1,11 @@
+#!/bin/bash
+# Dropdown terminal script for Hyprland
+# Uses tdrop with kitty for a beautiful dropdown terminal
+
+tdrop -ma \
+    -w 80% \
+    -h 60% \
+    -x 10% \
+    -y 5% \
+    -n dropdown \
+    kitty --title="dropdown-terminal" --class="dropdown-terminal"
