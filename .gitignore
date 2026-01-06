@@ -1,0 +1,35 @@
+# AI Assistant Context Files
+WARP.md
+CLAUDE.md
+.cursorrules
+.cursor/
+.github/copilot-instructions.md
+
+# Backup directories
+*.backup
+*-backup/
+config/backup/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor-specific files
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Log files
+*.log
+
+# Personal notes
+notes.md
+TODO.md
