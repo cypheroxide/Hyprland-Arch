@@ -135,6 +135,7 @@ install_packages() {
         "hyprland"
         "hyprpaper"
         "hyprlock"
+        "hypridle"
         "hyprshot"
         "xdg-desktop-portal-hyprland"
 
@@ -146,6 +147,7 @@ install_packages() {
         "waybar"
         "rofi"
         "wofi"
+        "fuzzel"
         "dunst"
         "kitty"
 
@@ -167,6 +169,7 @@ install_packages() {
         "gnome-keyring"
 
         # File management
+        "thunar"
         "yazi"
         "ffmpegthumbnailer"
         "p7zip"
@@ -272,19 +275,25 @@ set_permissions() {
 
     # Hypr scripts
     if [[ -d "$HOME/.config/hypr/Scripts" ]]; then
-        chmod +x "$HOME/.config/hypr/Scripts/"*.sh
+        chmod +x "$HOME/.config/hypr/Scripts/"*.sh 2>/dev/null || true
         print_success "Hyprland scripts are now executable"
+    fi
+
+    # Hyprlock scripts
+    if [[ -d "$HOME/.config/hypr/hyprlock" ]]; then
+        chmod +x "$HOME/.config/hypr/hyprlock/"*.sh 2>/dev/null || true
+        print_success "Hyprlock scripts are now executable"
     fi
 
     # Yazi scripts
     if [[ -d "$HOME/.config/yazi/Scripts" ]]; then
-        chmod +x "$HOME/.config/yazi/Scripts/"*.sh
+        chmod +x "$HOME/.config/yazi/Scripts/"*.sh 2>/dev/null || true
         print_success "Yazi scripts are now executable"
     fi
 
     # Local bin
     if [[ -d "$HOME/.local/bin" ]]; then
-        chmod +x "$HOME/.local/bin/"*
+        chmod +x "$HOME/.local/bin/"* 2>/dev/null || true
         print_success "Local binaries are now executable"
     fi
 }
@@ -295,26 +304,36 @@ configure_user_settings() {
 
     # Update monitor configuration for user's system
     print_warning "You may need to adjust monitor configuration for your system"
-    print_info "Edit: ~/.config/hypr/UserConfigs/04-monitors.conf"
+    print_info "Edit: ~/.config/hypr/monitors.conf"
     print_info "Run 'hyprctl monitors' to see your monitor names"
 
     # Note about applications
     print_warning "Review autostart applications in:"
-    print_info "  ~/.config/hypr/UserConfigs/05-autostart.conf"
+    print_info "  ~/.config/hypr/hyprland.conf (main autostart)"
+    print_info "  ~/.config/hypr/Scripts/05-autostart.conf (device-specific)"
     print_info "  ~/.config/autostart/"
+    
+    # Note about hyprlock theme
+    print_info ""
+    print_info "Hyprlock uses the Googlish theme with profile picture support"
+    print_info "To add your profile picture:"
+    print_info "  Place a profile image at: ~/.config/hypr/hyprlock/assets/profile.jpg"
+    print_info "  The theme will display it on the lock screen"
 }
 
 # Install Hyprland plugins
 install_plugins() {
     print_info "Installing Hyprland plugins..."
 
-    read -p "Install Hyprland plugins (hyprexpo, hyprfocus)? (y/N): " -n 1 -r
+    read -p "Install Hyprland plugins (hyprexpo)? (y/N): " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         if command -v hyprpm &> /dev/null; then
-            hyprpm add https://github.com/hyprwm/hyprland-plugins
+            print_info "Adding Hyprland plugins repository..."
+            hyprpm add https://github.com/hyprwm/hyprland-plugins 2>/dev/null || true
+            print_info "Enabling hyprexpo plugin..."
             hyprpm enable hyprexpo
-            hyprpm enable hyprfocus
+            print_info "Reloading plugins..."
             hyprpm reload -n
             print_success "Hyprland plugins installed"
         else
@@ -360,8 +379,11 @@ print_post_install() {
     print_info "Configuration files:"
     echo "  Main config:       ~/.config/hypr/hyprland.conf"
     echo "  Keybindings:       ~/.config/hypr/UserConfigs/03-keybinds.conf"
-    echo "  Monitors:          ~/.config/hypr/UserConfigs/04-monitors.conf"
-    echo "  Autostart:         ~/.config/hypr/UserConfigs/05-autostart.conf"
+    echo "  Monitors:          ~/.config/hypr/monitors.conf"
+    echo "  Workspaces:        ~/.config/hypr/workspaces.conf"
+    echo "  Autostart:         ~/.config/hypr/Scripts/05-autostart.conf"
+    echo "  Window Rules:      ~/.config/hypr/Scripts/07-window-rules.conf"
+    echo "  Theme:             ~/.config/hypr/themes/discordian.conf"
     echo ""
     if [[ -d "$BACKUP_DIR" ]]; then
         print_info "Your old configurations are backed up at:"
