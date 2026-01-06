@@ -151,7 +151,7 @@ Wallpapers are stored in `~/.config/hypr/hyprpaper/` and preloaded in `hyprpaper
 
 ### FZF Application Launcher
 
-A fast, keyboard-driven application launcher:
+A fast, keyboard-driven pop-up file search and app launcher:
 
 ```bash
 # Launch with
@@ -159,6 +159,18 @@ SUPER + S
 ```
 
 Searches through installed applications and recent files.
+
+### Rofi & Wofi Application Launcher
+
+Simple, standardized application launchers:
+
+```bash
+# Launch Wofi with categories:
+SUPER + Spacebar
+
+# Launch Rofi with:
+SUPER + R
+```
 
 ### Monitor Management
 
@@ -170,6 +182,7 @@ SUPER + CTRL + M
 ```
 
 Edit monitor configurations in `UserConfigs/04-monitors.conf` to suit your setup.
+Optional external portrait config for external portrait mode monitor.
 
 ---
 
@@ -181,6 +194,7 @@ Edit monitor configurations in `UserConfigs/04-monitors.conf` to suit your setup
 | `SUPER + Q` | Close active window |
 | `SUPER + M` | Exit Hyprland |
 | `SUPER + E` | Open file manager (Yazi) |
+| `SUPER + E` | Open file manager (Thunar) |
 | `SUPER + B` | Open browser (Brave) |
 | `SUPER + Space` | Open Wofi application menu |
 | `SUPER + R` | Open Rofi launcher |
@@ -193,13 +207,12 @@ Edit monitor configurations in `UserConfigs/04-monitors.conf` to suit your setup
 | `SUPER + PRINT` | Screenshot window |
 | `SUPER + 1-9` | Switch to workspace 1-9 |
 | `SUPER + SHIFT + 1-9` | Move window to workspace |
-| `SUPER + TAB` | Toggle overview mode |
 | `SUPER + A` | Toggle Hyprexpo |
 | `SUPER + SHIFT + L` | Rotate wallpaper |
 
 For a complete list, press `SUPER + /` within Hyprland or view `.config/hypr/UserConfigs/03-keybinds.conf`.
 
-**Recommendation**: When updating keybinds, be sure to update `.config/hypr/Scripts/keybind-help.sh` with the updated bindings.
+**Recommendation**: When updating keybinds, be sure to update `.config/hypr/Scripts/keybind-help.sh` with the updated bindings to reflect changes in the helper.
 
 ---
 
@@ -231,7 +244,7 @@ network-manager-applet blueman
 udiskie polkit-gnome gnome-keyring
 
 # File management
-yazi ffmpegthumbnailer p7zip jq poppler fd ripgrep fzf imagemagick
+yazi ffmpegthumbnailer p7zip jq poppler fd ripgrep fzf imagemagick thunar
 ```
 
 ### Optional AUR Packages
@@ -355,7 +368,7 @@ Randomly selects and applies a wallpaper from preloaded images.
 
 ### switch-monitors.sh
 
-Switches between monitor configuration profiles.
+Switches between monitor configuration profiles. Useful for laptops that occassionally use external monitors.
 
 **Usage**:
 ```bash
@@ -392,7 +405,7 @@ Automatically parses keybindings from your config file.
 
 ## Recommended Applications
 
-This configuration works seamlessly with:
+This configuration should work seamlessly with:
 
 - **Terminal**: Kitty (configured), Alacritty, Foot
 - **Browser**: Brave (configured), Firefox, Chromium
@@ -440,6 +453,7 @@ For different monitor arrangements:
 1. Get monitor information: `hyprctl monitors`
 2. Edit `UserConfigs/04-monitors.conf`
 3. Use position values to arrange monitors (e.g., `1920x0` for side-by-side)
+4. Use `nwg-displays` for more advanced layouts
 
 ### Workspace Management
 
@@ -467,6 +481,14 @@ Contributions are welcome! Please feel free to submit issues or pull requests.
 This configuration is provided as-is under the MIT License. Feel free to use, modify, and distribute.
 
 ---
+
+## TODO LIST
+- [] Custom configurations/themes
+- [] Update dependendencies, as needed
+- [] Add additional applications/configurations
+- [] Include theme switcher
+- [] ...
+- [] Profit?
 
 ## Acknowledgments
 
